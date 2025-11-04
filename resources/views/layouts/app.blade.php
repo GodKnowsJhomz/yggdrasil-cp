@@ -87,9 +87,24 @@
                                         $user = \App\Models\User::find(session('user_id'));
                                     @endphp
                                     @if($user && $user->role === 'admin')
-                                        <a class="bg-brand-main text-white px-4 py-2 rounded-md hover:bg-brand-green transition-colors font-bold" href="{{ route('admin.news.index') }}">
-                                            🛠️ Admin Panel
-                                        </a>
+                                        <div class="relative admin-menu-container">
+                                            <button id="admin-menu-btn" class="bg-brand-main text-white px-4 py-2 rounded-md hover:bg-brand-green transition-colors font-bold flex items-center gap-2">
+                                                🛠️ Admin Panel
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                </svg>
+                                            </button>
+                                            <div id="admin-menu" class="hidden absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                                                <div class="py-1" role="menu">
+                                                    <a href="{{ route('admin.news.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-robotoCond">
+                                                        � Gerenciar Notícias
+                                                    </a>
+                                                    <a href="{{ route('admin.vote.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-robotoCond">
+                                                        🗳️ Gerenciar Votação
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endif
                                 @endif
                                 <a class="hover:text-ui-fg-base" data-testid="nav-account-link" href="{{ url('/account') }}">Global Account</a>
@@ -128,6 +143,32 @@
             </footer>
         </div>
     </main>
+    
+    <script>
+        // Admin menu dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            const adminBtn = document.getElementById('admin-menu-btn');
+            const adminMenu = document.getElementById('admin-menu');
+            
+            if (adminBtn && adminMenu) {
+                adminBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    adminMenu.classList.toggle('hidden');
+                });
+                
+                // Fechar ao clicar fora
+                document.addEventListener('click', function() {
+                    adminMenu.classList.add('hidden');
+                });
+                
+                // Prevenir fechar ao clicar dentro do menu
+                adminMenu.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+        });
+    </script>
+    
     <script src="{{ asset('_next/static/chunks/webpack-364a2b9f875667ce.js') }}" async=""></script>
     <!-- Additional scripts as needed -->
 </body>
